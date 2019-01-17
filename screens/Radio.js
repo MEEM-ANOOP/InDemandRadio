@@ -4,7 +4,8 @@ import {
   Text,
   StyleSheet,
   Image,
-  FlatList
+  FlatList,
+  SafeAreaView
 } from 'react-native';
 import {
   Icon,
@@ -45,6 +46,7 @@ class Radio extends Component{
   renderItem = ({item}) => {
 
     return(
+      <SafeAreaView>
         <View style = {styles.listConatainer}>
           <Image
           style = {styles.listImageStyle}
@@ -55,6 +57,7 @@ class Radio extends Component{
             <Text style={styles.listSubTitleStyle}>{item.population}</Text>
           </View>
         </View>
+      </SafeAreaView>
     )
 
   }
@@ -89,6 +92,7 @@ class Radio extends Component{
         <FlatList
           data={this.state.dataSource}
           renderItem={this.renderItem}
+          keyExtractor={(item, index) => index.toString()}
         />
         </Content>
       </Container>
