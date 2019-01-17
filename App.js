@@ -14,64 +14,92 @@ import {
   View,
   SafeAreaView,
   ScrollView,
-  Dimensions
+  Dimensions,
+  Image
   } from 'react-native';
-import {createDrawerNavigator, DrawerItems} from 'react-navigation';
-import HomeScreen from './screens/HomeScreen';
-import SettingsScreen from './screens/SettingsScreen';
+import {createDrawerNavigator, DrawerItems,DrawerNavigator,Stacknavigator} from 'react-navigation';
+import Radio from './screens/Radio';
+import Podcasts from './screens/Podcasts';
+import Settings from './screens/Settings';
+import Info from './screens/Info';
+import {
+  Container,
+  Content,
+  Header,
+  Body,
+  Icon
+} from 'native-base';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
 
 type Props = {};
 export default class App extends Component<Props> {
   render() {
     return (
-      < AppDrawerNavigator />
+      < MyApp />
     );
   }
 }
-
+//For customizing side menu
 const CustomDrawerComponent= (props)=>(
-  <SafeAreaView>
-    <View style={{height:150,backgroundColor:'black'}}>
-    </View>
-    <ScrollView>
-      <DrawerItems {...props}/>
-    </ScrollView>
-  </SafeAreaView>
+  //<SafeAreaView>
+    // <View style={styles.customDrawerImageViewStyle}>
+    // </View>
+    // <ScrollView>
+    //   <DrawerItems {...props}/>
+    // </ScrollView>
+  //</SafeAreaView>
+
+  <Container>
+    <Header style= {styles.headerStyle}>
+      <Body>
+        <Image
+          style={styles.drawerImage}
+          source={require("./assets/drawer-profile-logo.jpeg")}
+        />
+      </Body>
+    </Header>
+      <ScrollView>
+        <DrawerItems {...props}/>
+      </ScrollView>
+    <Content>
+    </Content>
+  </Container>
 
 )
-
-const AppDrawerNavigator = createDrawerNavigator({
-  Home:HomeScreen,
-  Settings:SettingsScreen
-
+const MyApp = DrawerNavigator({
+  Radio:{
+    screen:Radio
+  },
+  Podcasts:{
+    screen:Podcasts
+  },
+  Settings:{
+    screen:Settings
+  },
+  Info:{
+    screen:Info
+  }
 },
 {
-  contentComponent: CustomDrawerComponent
-
+  initialRouteName:"Radio",
+  contentComponent: CustomDrawerComponent,
+  drawerOpenRoute:"DrawerOpen",
+  drawerCloseRoute:"DrawerClose",
+  drawerToggleRoute:"DrawerToggle"
 })
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+  customDrawerImageViewStyle: {
+    height: 150,
+    backgroundColor: 'black'
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  drawerImage:{
+    height:150,
+    width:150,
+    borderRadius:75
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+  headerStyle:{
+    height: 200,
+    backgroundColor:'orange'
+  }
 });
