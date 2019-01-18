@@ -50,11 +50,12 @@ class Radio extends Component{
         <View style = {styles.listConatainer}>
           <Image
           style = {styles.listImageStyle}
-          source = {{uri: item.flag}}
+          source = {{uri: item.Image}}
           />
           <View style = {styles.listContentStyle}>
-            <Text style={styles.listMainTitleStyle}>{item.country}</Text>
-            <Text style={styles.listSubTitleStyle}>{item.population}</Text>
+            <Text style={styles.listMainTitleStyle}>{item.Title}</Text>
+            <Text style={styles.listSubTitleStyle}>{item.Artist}</Text>
+            <Text style={styles.listSubTitleStyle}>{item.AirTime}</Text>
           </View>
         </View>
       </SafeAreaView>
@@ -63,12 +64,14 @@ class Radio extends Component{
   }
 
   componentDidMount(){
-    const url = "https://www.androidbegin.com/tutorial/jsonparsetutorial.txt"
+    //const audioLiveStreamURL = "https://indemandradio.com/in_demand_radio"
+    const url = "https://api.indemandradio.com/metadata"
+    //const url = "https://www.androidbegin.com/tutorial/jsonparsetutorial.txt"
     fetch(url)
       .then((response) => response.json())
       .then((responseJson)=>{
        this.setState({
-         dataSource:responseJson.worldpopulation
+         dataSource:responseJson.PlayHistory
        })
     })
     .catch((error)=>{
@@ -87,6 +90,12 @@ class Radio extends Component{
         <Body><Title>Radio</Title></Body>
         <Right />
       </Header>
+        <View style={styles.PlayerViewStyle}>
+
+        </View>
+        <View>
+          <Text>Recently played</Text>
+        </View>
 
         <Content contentContainerStyle={styles.container}>
         <FlatList
@@ -130,5 +139,9 @@ const styles ={
   listSubTitleStyle:{
     fontSize:14,
     color:'gray'
+  },
+  PlayerViewStyle:{
+    backgroundColor:'black',
+    height: 150
   }
 };
