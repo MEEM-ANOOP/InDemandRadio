@@ -5,7 +5,8 @@ import {
   StyleSheet,
   Image,
   FlatList,
-  SafeAreaView
+  SafeAreaView,
+  TouchableWithoutFeedback
 } from 'react-native';
 import {
   Icon,
@@ -26,16 +27,20 @@ import { DrawerActions } from 'react-navigation';
 
 class Podcasts extends Component{
 
-  static navigationOptions = {
-    title: 'Podcasts',
-    drawerIcon:(
-      <Image
-        source={require("../assets/podcasts.png")}
-        style = {{height:25,width:25}}
-      />
-    )
+  // static navigationOptions = {
+  //   title: 'Podcasts',
+  //   // drawerIcon:(
+  //   //   <Image
+  //   //     source={require("../assets/podcasts.png")}
+  //   //     style = {{height:25,width:25}}
+  //   //   />
+  //   // )
+  //
+  // }
 
-  }
+  static navigationOptions = {
+    header: null
+  };
 
   constructor(){
     super()
@@ -47,6 +52,7 @@ class Podcasts extends Component{
 
     return(
       <SafeAreaView>
+      <TouchableWithoutFeedback onPress={() => this.actionOnRow(item)}>
         <View style = {styles.listConatainer}>
           <Image
           style = {styles.listImageStyle}
@@ -58,9 +64,15 @@ class Podcasts extends Component{
             <Text style={styles.listSubTitleStyle}>Episodes:{item.episodes.length}</Text>
           </View>
         </View>
+      </TouchableWithoutFeedback>
       </SafeAreaView>
     )
 
+  }
+
+  actionOnRow(item) {
+   console.log('Selected Item :',item);
+   this.props.navigation.push("EpisodeList");
   }
 
   componentDidMount(){

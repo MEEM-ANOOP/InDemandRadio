@@ -17,11 +17,12 @@ import {
   Dimensions,
   Image
   } from 'react-native';
-import {createDrawerNavigator, DrawerItems,DrawerNavigator,Stacknavigator} from 'react-navigation';
+import {createDrawerNavigator, DrawerItems,DrawerNavigator,Stacknavigator,createStackNavigator} from 'react-navigation';
 import Radio from './screens/Radio';
 import Podcasts from './screens/Podcasts';
 import Settings from './screens/Settings';
 import Info from './screens/Info';
+import EpisodeList from './screens/EpisodeList';
 import {
   Container,
   Content,
@@ -41,13 +42,6 @@ export default class App extends Component<Props> {
 }
 //For customizing side menu
 const CustomDrawerComponent= (props)=>(
-  //<SafeAreaView>
-    // <View style={styles.customDrawerImageViewStyle}>
-    // </View>
-    // <ScrollView>
-    //   <DrawerItems {...props}/>
-    // </ScrollView>
-  //</SafeAreaView>
 
   <Container>
     <Header style= {styles.headerStyle}>
@@ -66,18 +60,35 @@ const CustomDrawerComponent= (props)=>(
   </Container>
 
 )
+const infoStackNav = createStackNavigator({
+  info: Info
+})
+
+const radioStackNav = createStackNavigator({
+  radio: Radio
+})
+
+const podcastStackNav = createStackNavigator({
+  podcast: Podcasts,
+  EpisodeList:EpisodeList
+})
+
+const settingsStackNav = createStackNavigator({
+  podcast: Settings
+})
+
 const MyApp = DrawerNavigator({
   Radio:{
-    screen:Radio
+    screen:radioStackNav
   },
   Podcasts:{
-    screen:Podcasts
+    screen:podcastStackNav
   },
   Settings:{
-    screen:Settings
+    screen:settingsStackNav
   },
   Info:{
-    screen:Info
+    screen:infoStackNav
   }
 },
 {

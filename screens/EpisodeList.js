@@ -3,8 +3,7 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
-  TouchableWithoutFeedback
+  Image
 } from 'react-native';
 import {
   Icon,
@@ -19,43 +18,24 @@ import {
 } from 'native-base'
 
 
-
-class Info extends Component{
+class EpisodeList extends Component{
 
   // static navigationOptions = {
-  //   header: null,
   //   drawerIcon:(
   //     <Image
   //       source={require("../assets/info.png")}
   //       style = {{height:25,width:25}}
-  //       title= "Info"
+  //       title= "Episode"
   //     />
   //   )
   // }
-
-  static navigationOptions = {
-    header: null
-  };
-
-  actionOnRow() {
-   this.props.navigation.push("EpisodeList");
-  }
 
   render(){
 
     return(
       <Container>
-      <Header>
-        <Left>
-          <Icon name="ios-menu" onPress={() => this.props.navigation.openDrawer()} />
-        </Left>
-        <Body><Title>Info</Title></Body>
-        <Right />
-      </Header>
         <Content contentContainerStyle={styles.container}>
-        <TouchableWithoutFeedback onPress={() => this.actionOnRow()}>
-          <Text>InfoScreen</Text>
-        </TouchableWithoutFeedback>
+          <Text>Episode</Text>
         </Content>
       </Container>
     );
@@ -63,8 +43,7 @@ class Info extends Component{
   }
 }
 
-
-export default Info;
+export default EpisodeList;
 
 const styles ={
   container:{

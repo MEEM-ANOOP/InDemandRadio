@@ -22,16 +22,20 @@ import { DrawerActions } from 'react-navigation';
 
 class Settings extends Component{
 
-  static navigationOptions = {
-    title: 'Settings',
-    drawerIcon:(
-      <Image
-        source={require("../assets/settings.png")}
-        style = {{height:25,width:25}}
-      />
-    ),
+  // static navigationOptions = {
+  //   title: 'Settings',
+  //   // drawerIcon:(
+  //   //   <Image
+  //   //     source={require("../assets/settings.png")}
+  //   //     style = {{height:25,width:25}}
+  //   //   />
+  //   // )
+  //
+  // }
 
-  }
+  static navigationOptions = {
+    header: null
+  };
 
   render(){
 

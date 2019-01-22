@@ -5,7 +5,9 @@ import {
   StyleSheet,
   Image,
   FlatList,
-  SafeAreaView
+  SafeAreaView,
+  TouchableWithoutFeedback,
+  TouchableOpacity
 } from 'react-native';
 import {
   Icon,
@@ -21,32 +23,55 @@ import {
   Thumbnail
 } from 'native-base';
 import { DrawerActions } from 'react-navigation';
+import { ReactNativeAudioStreaming } from 'react-native-audio-stream';
+import { Player } from 'react-native-audio-stream';
+
+
+//const audioLiveStreamURL = "https://indemandradio.com/in_demand_radio"
+//const url = "https://www.androidbegin.com/tutorial/jsonparsetutorial.txt"
+
 
 
 
 class Radio extends Component{
 
   static navigationOptions = {
-    title: 'Radio',
-    drawerIcon:(
-      <Image
-        source={require("../assets/radio.png")}
-        style = {{height:25,width:25}}
-      />
-    )
+    header: null
+  };
 
-  }
 
   constructor(){
     super()
     this.state = {
-      dataSource:[]
+
+      dataSource:[],
+      playButtonTitle: "Play",
+      nowArtist:"",
+      NowTitle:"",
+      NowArtistImage:"",
+      NowShowName:"",
+      NowShowDescription:"",
+      NowShowImage:""
+
     }
   }
+
+  onPlayButtonPress = () => {
+
+      if(this.state.playButtonTitle === "Play"){
+        this.setState({playButtonTitle: 'Pause'})
+        ReactNativeAudioStreaming.play("https://indemandradio.com/in_demand_radio", {showIniOSMediaCenter: true});
+      }else {
+        this.setState({playButtonTitle: 'Play'})
+        ReactNativeAudioStreaming.pause();
+      }
+  }
+
   renderItem = ({item}) => {
 
     return(
       <SafeAreaView>
+      <TouchableWithoutFeedback onPress={() => this.actionOnRow(item)}>
         <View style = {styles.listConatainer}>
           <Image
           style = {styles.listImageStyle}
@@ -58,15 +83,19 @@ class Radio extends Component{
             <Text style={styles.listSubTitleStyle}>{item.AirTime}</Text>
           </View>
         </View>
+      </TouchableWithoutFeedback>
       </SafeAreaView>
     )
 
   }
 
+  actionOnRow(item) {
+   console.log('Selected Item :',item);
+
+  }
+
   componentDidMount(){
-    //const audioLiveStreamURL = "https://indemandradio.com/in_demand_radio"
     const url = "https://api.indemandradio.com/metadata"
-    //const url = "https://www.androidbegin.com/tutorial/jsonparsetutorial.txt"
     fetch(url)
       .then((response) => response.json())
       .then((responseJson)=>{
@@ -79,7 +108,6 @@ class Radio extends Component{
     })
   }
 
-
   render(){
     return(
       <Container>
@@ -91,7 +119,7 @@ class Radio extends Component{
         <Right />
       </Header>
         <View style={styles.PlayerViewStyle}>
-
+          <Player url={"https://indemandradio.com/in_demand_radio"} />
         </View>
         <View>
           <Text>Recently played</Text>
@@ -99,7 +127,7 @@ class Radio extends Component{
 
         <Content contentContainerStyle={styles.container}>
         <FlatList
-          data={this.state.dataSource}
+          data={this.state.dataSource.reverse()}
           renderItem={this.renderItem}
           keyExtractor={(item, index) => index.toString()}
         />
@@ -141,7 +169,7 @@ const styles ={
     color:'gray'
   },
   PlayerViewStyle:{
-    backgroundColor:'black',
+    backgroundColor:'white',
     height: 150
   }
 };
