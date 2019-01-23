@@ -29,6 +29,7 @@ import { Player } from 'react-native-audio-stream';
 
 //const audioLiveStreamURL = "https://indemandradio.com/in_demand_radio"
 //const url = "https://www.androidbegin.com/tutorial/jsonparsetutorial.txt"
+//const apiUrl = "https://api.indemandradio.com/metadata"
 
 
 

@@ -4,9 +4,10 @@ import {
   Text,
   StyleSheet,
   Image,
+  TouchableWithoutFeedback,
   FlatList,
   SafeAreaView,
-  TouchableWithoutFeedback
+  ScrollView
 } from 'react-native';
 import {
   Icon,
@@ -16,38 +17,51 @@ import {
   Content,
   Left,
   Right,
-  Body,
   Title,
-  ListItem,
-  Thumbnail
-} from 'native-base';
-import { DrawerActions } from 'react-navigation';
-
+  Body
+} from 'native-base'
+import Accordion from 'react-native-collapsible/Accordion';
 
 
 class Podcasts extends Component{
-
-  // static navigationOptions = {
-  //   title: 'Podcasts',
-  //   // drawerIcon:(
-  //   //   <Image
-  //   //     source={require("../assets/podcasts.png")}
-  //   //     style = {{height:25,width:25}}
-  //   //   />
-  //   // )
-  //
-  // }
 
   static navigationOptions = {
     header: null
   };
 
+  actionOnRow(item) {
+   console.log('selectedItem', item);
+  }
+
   constructor(){
     super()
     this.state = {
-      dataSource:[]
+      dataSource:[],
+      activeSections: [],
     }
   }
+
+  _renderSectionTitle = section => {
+    return (
+      <View style={styles.content}>
+        <Text>{section.content}</Text>
+      </View>
+    );
+  };
+
+  _renderHeader = section => {
+    return (
+      <View style={styles.header}>
+        <Text style={styles.headerText}>{section.name}</Text>
+        <Image
+        style = {styles.listImageStyle}
+        source = {{uri: section.image}}
+        />
+      </View>
+    );
+  };
+
+
   renderItem = ({item}) => {
 
     return(
@@ -56,12 +70,10 @@ class Podcasts extends Component{
         <View style = {styles.listConatainer}>
           <Image
           style = {styles.listImageStyle}
-          source = {{uri: item.image}}
+          source = {{uri: item.Image}}
           />
           <View style = {styles.listContentStyle}>
-            <Text style={styles.listMainTitleStyle}>{item.name}</Text>
-            <Text style={styles.listSubTitleStyle}>{item.description}</Text>
-            <Text style={styles.listSubTitleStyle}>Episodes:{item.episodes.length}</Text>
+            <Text style={styles.listMainTitleStyle}>{item.description}</Text>
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -70,53 +82,64 @@ class Podcasts extends Component{
 
   }
 
-  actionOnRow(item) {
-   console.log('Selected Item :',item);
-   this.props.navigation.push("EpisodeList");
-  }
+  _renderContent = section => {
+    return (
+      <FlatList
+        data={section.episodes}
+        renderItem={this.renderItem}
+        keyExtractor={(item, index) => index.toString()}
+      />
+    );
+  };
+
+  _updateSections = activeSections => {
+    this.setState({ activeSections });
+  };
 
   componentDidMount(){
     const url = "https://api.indemandradio.com/metadata"
-    //const url = "https://www.androidbegin.com/tutorial/jsonparsetutorial.txt"
     fetch(url)
       .then((response) => response.json())
       .then((responseJson)=>{
        this.setState({
          dataSource:responseJson.ListenAgain
        })
+       console.log('dataSource:',this.state.dataSource);
     })
     .catch((error)=>{
       console.log(error)
     })
   }
 
-
   render(){
+
     return(
       <Container>
       <Header>
         <Left>
-          <Icon name="ios-menu" onPress={() => this.props.navigation.openDrawer()}> </Icon>
+          <Icon name="ios-menu" onPress={() => this.props.navigation.openDrawer()} />
         </Left>
         <Body><Title>Podcasts</Title></Body>
         <Right />
       </Header>
-        <View style = {styles.descriptionView}>
-          <Text style ={styles.descriptionTextStyle}>Listen again to your favourite shows - any time you like!</Text>
-        </View>
-
         <Content contentContainerStyle={styles.container}>
-        <FlatList
-          data={this.state.dataSource}
-          renderItem={this.renderItem}
-          keyExtractor={(item, index) => index.toString()}
+        <ScrollView>
+        <Accordion
+          sections={this.state.dataSource}
+          activeSections={this.state.activeSections}
+          renderHeader={this._renderHeader}
+          renderContent={this._renderContent}
+          onChange={this._updateSections}
         />
+        </ScrollView>
         </Content>
       </Container>
+
     );
 
   }
 }
+
 
 export default Podcasts;
 
@@ -148,13 +171,8 @@ const styles ={
     fontSize:14,
     color:'gray'
   },
-  descriptionView:{
-    backgroundColor:'black',
-    height: 50
-  },
-  descriptionTextStyle:{
-    fontSize: 18,
-    color:'white',
-    marginLeft:5
+  PlayerViewStyle:{
+    backgroundColor:'white',
+    height: 150
   }
 };
