@@ -30,6 +30,8 @@ import {
   Body,
   Icon
 } from 'native-base';
+import ImageResizeMode from 'react-native/Libraries/Image/ImageResizeMode'
+
 
 
 type Props = {};
@@ -48,7 +50,8 @@ const CustomDrawerComponent= (props)=>(
       <Body>
         <Image
           style={styles.drawerImage}
-          source={require("./assets/drawer-profile-logo.jpeg")}
+          source={require("./assets/logo_beta_yellow.png")}
+          resizeMode={ImageResizeMode.contain}
         />
       </Body>
     </Header>
@@ -96,7 +99,13 @@ const MyApp = DrawerNavigator({
   contentComponent: CustomDrawerComponent,
   drawerOpenRoute:"DrawerOpen",
   drawerCloseRoute:"DrawerClose",
-  drawerToggleRoute:"DrawerToggle"
+  drawerToggleRoute:"DrawerToggle",
+  contentOptions: {
+       style: {
+        backgroundColor: 'black',
+        flex: 1
+      }
+    }
 })
 
 const styles = StyleSheet.create({
@@ -106,11 +115,10 @@ const styles = StyleSheet.create({
   },
   drawerImage:{
     height:150,
-    width:150,
-    borderRadius:75
+    width:200,
   },
   headerStyle:{
-    height: 200,
-    backgroundColor:'orange'
+    height: 100,
+    backgroundColor:'#bfc7c3',
   }
 });

@@ -52,14 +52,35 @@ class Podcasts extends Component{
   _renderHeader = section => {
     return (
       <View style={styles.header}>
-        <Text style={styles.headerText}>{section.name}</Text>
-        <Image
-        style = {styles.listImageStyle}
-        source = {{uri: section.image}}
-        />
+        {this.loadItemImage(section.image)}
+        <View style ={styles.ListTextConatinerViewStyle}>
+          <Text style={styles.listMainTitleStyle}>{section.name}</Text>
+          <Text style={styles.description}>{section.description}</Text>
+          <Text style={styles.description}>Episodes:{section.episodes.length}</Text>
+        </View>
       </View>
     );
   };
+
+  loadItemImage(imageUrl){
+    console.log('ImageUrl',imageUrl);
+    if (imageUrl.length) {
+      return(
+        <Image
+        style = {styles.listImageStyle}
+        source={{ uri: imageUrl}}
+        onError={(e) => { this.props.source = { require: '../assets/placeholder.png'}}}
+        />
+      );
+    }else {
+      return(
+        <Image
+        style = {styles.listImageStyle}
+        source={require( '../assets/placeholder.png')}
+        />
+      );
+    }
+  }
 
 
   renderItem = ({item}) => {
@@ -70,7 +91,7 @@ class Podcasts extends Component{
         <View style = {styles.listConatainer}>
           <Image
           style = {styles.listImageStyle}
-          source = {{uri: item.Image}}
+          source={require( '../assets/placeholder.png')}
           />
           <View style = {styles.listContentStyle}>
             <Text style={styles.listMainTitleStyle}>{item.description}</Text>
@@ -115,23 +136,23 @@ class Podcasts extends Component{
 
     return(
       <Container>
-      <Header>
-        <Left>
-          <Icon name="ios-menu" onPress={() => this.props.navigation.openDrawer()} />
-        </Left>
-        <Body><Title>Podcasts</Title></Body>
-        <Right />
-      </Header>
+        <Header>
+          <Left>
+            <Icon name="ios-menu" onPress={() => this.props.navigation.openDrawer()} />
+          </Left>
+          <Body><Title>Podcasts</Title></Body>
+          <Right />
+        </Header>
         <Content contentContainerStyle={styles.container}>
-        <ScrollView>
-        <Accordion
-          sections={this.state.dataSource}
-          activeSections={this.state.activeSections}
-          renderHeader={this._renderHeader}
-          renderContent={this._renderContent}
-          onChange={this._updateSections}
-        />
-        </ScrollView>
+            <ScrollView>
+              <Accordion
+                sections={this.state.dataSource}
+                activeSections={this.state.activeSections}
+                renderHeader={this._renderHeader}
+                renderContent={this._renderContent}
+                onChange={this._updateSections}
+              />
+            </ScrollView>
         </Content>
       </Container>
 
@@ -174,5 +195,22 @@ const styles ={
   PlayerViewStyle:{
     backgroundColor:'white',
     height: 150
+  },
+  header:{
+    flexDirection:'row',
+    borderBottomColor: 'gray',
+    borderBottomWidth: 1,
+  },
+  listMainTitleStyle:{
+    fontSize: 18,
+    color:'#ca4587',
+    fontWeight:'bold'
+  },
+  listSubTitleStyle:{
+    fontSize:14,
+    color:'gray'
+  },
+  ListTextConatinerViewStyle:{
+    marginRight:20,
   }
 };

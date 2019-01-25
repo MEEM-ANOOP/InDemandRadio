@@ -29,11 +29,10 @@ import playImage from '../assets/play.png';
 import pauseImage from '../assets/pause.png';
 
 
+
 //const audioLiveStreamURL = "https://indemandradio.com/in_demand_radio"
 //const url = "https://www.androidbegin.com/tutorial/jsonparsetutorial.txt"
 //const apiUrl = "https://api.indemandradio.com/metadata"
-
-
 
 
 class Radio extends Component{
@@ -76,28 +75,45 @@ class Radio extends Component{
     return "11:30";
   }
 
+  getPlayedTime(airTime){
+    return airTime;
+  }
+
+  loadItemImage(imageUrl){
+    console.log('ImageUrl',imageUrl);
+    if (imageUrl.length) {
+      return(
+        <Image
+        style = {styles.listImageStyle}
+        source={{ uri: imageUrl}}
+        onError={(e) => { this.props.source = { require: '../assets/placeholder.png'}}}
+        />
+      );
+    }else {
+      return(
+        <Image
+        style = {styles.listImageStyle}
+        source={require( '../assets/placeholder.png')}
+        />
+      );
+    }
+  }
+
   renderItem = ({item}) => {
 
     return(
       <SafeAreaView>
         <View style = {styles.listConatainer}>
-          <Image
-          style = {styles.listImageStyle}
-          source={{ uri: item.Image}}
-          onError={(e) => { this.props.source = { reqire: '../assets/placeholder.png'}}}
-          />
+          {this.loadItemImage(item.Image)}
           <View style = {styles.listContentStyle}>
             <Text style={styles.listMainTitleStyle}>{item.Artist}</Text>
             <Text style={styles.listSubTitleStyle}>{item.Title}</Text>
-            <Text style={styles.listSubTitleStyle}>{item.AirTime}</Text>
+            <Text style={styles.listSubTitleStyle}>{this.getPlayedTime(item.AirTime)}</Text>
           </View>
         </View>
       </SafeAreaView>
     )
-
   }
-
-
 
   componentDidMount(){
     const url = "https://api.indemandradio.com/metadata"
@@ -128,6 +144,10 @@ class Radio extends Component{
     })
   }
 
+  componentWillUnmount() {
+    console.log('componentWillUnmount');
+  }
+
   //<Player url={"https://indemandradio.com/in_demand_radio"} />
 
   render(){
@@ -143,10 +163,7 @@ class Radio extends Component{
         </Header>
 
         <View style={styles.PlayerViewStyle}>
-            <Image
-            style = {styles.NowPlayingImageStyle}
-            source = {{uri: this.state.NowArtistImage}}
-            />
+            {this.loadItemImage(this.state.NowArtistImage)}
             <View style = {styles.listContentStyle}>
               <Text style={styles.NowPlayingTitleStyle}>{this.state.NowArtist}</Text>
               <Text style={styles.listSubTitleStyle}>{this.state.NowTitle}</Text>
